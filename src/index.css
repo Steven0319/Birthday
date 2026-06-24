@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+/* Floating hearts */
+.pointer-events-none {
+  pointer-events: none;
+}
+
+.animate-float {
+  animation: float-up linear infinite;
+}
+
+@keyframes float-up {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+
+  5% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(-120vh);
+    opacity: 0;
+  }
+}
