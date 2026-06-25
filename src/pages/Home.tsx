@@ -14,7 +14,7 @@ export const Home = () => {
   const [entered, setEntered] = useState(false);
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-black via-zinc-950 to-black text-white">
+    <div className="relative min-h-screen overflow-hidden bg-linear-to-b from-black via-zinc-950 to-black text-white">
       <FloatingHearts />
       <MusicPlayer />
 

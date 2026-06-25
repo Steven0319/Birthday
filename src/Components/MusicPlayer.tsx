@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import { FaPause, FaPlay, FaMusic } from "react-icons/fa";
 import { motion } from "framer-motion";
 
-const MusicIcon = FaMusic as React.ComponentType<React.SVGProps<SVGSVGElement>>;
-const PauseIcon = FaPause as React.ComponentType<React.SVGProps<SVGSVGElement>>;
-const PlayIcon = FaPlay as React.ComponentType<React.SVGProps<SVGSVGElement>>;
+const MusicIcon = FaMusic as React.ComponentType;
+const PauseIcon = FaPause as React.ComponentType;
+const PlayIcon = FaPlay as React.ComponentType;
 
 export const MusicPlayer = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -17,16 +17,13 @@ export const MusicPlayer = () => {
     if (!audio) return;
 
     try {
-      if (isPlaying) {
-        audio.pause();
-        setIsPlaying(false);
-      } else {
+      if (audio.paused) {
         await audio.play();
-        setIsPlaying(true);
+      } else {
+        audio.pause();
       }
     } catch (error) {
       console.error("No se pudo reproducir el audio:", error);
-      setIsPlaying(false);
     }
   };
 
@@ -37,24 +34,20 @@ export const MusicPlayer = () => {
 
     audio.volume = 0.5;
 
-    const handleEnded = () => {
-      setIsPlaying(false);
-    };
+    const handlePlay = () => setIsPlaying(true);
+    const handlePause = () => setIsPlaying(false);
+    const handleEnded = () => setIsPlaying(false);
 
-    const handleError = () => {
-      console.error(
-        "No se encontró el archivo: public/music/song.mp3"
-      );
-      setIsPlaying(false);
-    };
-
+    audio.addEventListener("play", handlePlay);
+    audio.addEventListener("pause", handlePause);
     audio.addEventListener("ended", handleEnded);
-    audio.addEventListener("error", handleError);
 
     return () => {
       audio.pause();
+
+      audio.removeEventListener("play", handlePlay);
+      audio.removeEventListener("pause", handlePause);
       audio.removeEventListener("ended", handleEnded);
-      audio.removeEventListener("error", handleError);
     };
   }, []);
 
@@ -64,6 +57,7 @@ export const MusicPlayer = () => {
         ref={audioRef}
         src="./public/music/song.mp3"
         preload="auto"
+        playsInline
         loop
       />
 
@@ -104,16 +98,12 @@ export const MusicPlayer = () => {
           <motion.div
             animate={
               isPlaying
-                ? {
-                    rotate: 360,
-                  }
-                : {
-                    rotate: 0,
-                  }
+                ? { rotate: 360 }
+                : { rotate: 0 }
             }
             transition={{
-              repeat: Infinity,
               duration: 4,
+              repeat: Infinity,
               ease: "linear",
             }}
           >
@@ -128,11 +118,13 @@ export const MusicPlayer = () => {
               : "Nuestra Canción ❤️"}
           </span>
 
-          {isPlaying ? (
-            <span className="text-pink-400"><PauseIcon /></span>
-          ) : (
-            <span className="text-pink-400"><PlayIcon /></span>
-          )}
+          <span className="text-pink-400">
+            {isPlaying ? (
+              <PauseIcon />
+            ) : (
+              <PlayIcon />
+            )}
+          </span>
         </button>
       </motion.div>
     </>
