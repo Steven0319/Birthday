@@ -69,7 +69,7 @@ export const MusicPlayer = () => {
     <>
       <audio
         ref={audioRef}
-        src="public/Music/song.mp3"
+        src="/Music/song.mp3"
         preload="auto"
         playsInline
         loop
@@ -88,7 +88,7 @@ export const MusicPlayer = () => {
           delay: 2,
           duration: 0.6,
         }}
-        className="fixed bottom-6 right-6 z-9999"
+        className="fixed bottom-6 right-6 z-[9999]"
       >
         <button
           onClick={toggleMusic}
