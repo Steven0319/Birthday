@@ -12,20 +12,25 @@ export const MusicPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
 
   const toggleMusic = async () => {
-    alert("Botón detectado");
-
     const audio = audioRef.current;
 
-    if (!audio) return;
+    if (!audio) {
+      alert("Audio no encontrado");
+      return;
+    }
 
     try {
       if (audio.paused) {
         await audio.play();
+        setIsPlaying(true);
       } else {
         audio.pause();
+        setIsPlaying(false);
       }
     } catch (error) {
-      console.error("No se pudo reproducir el audio:", error);
+      console.error(error);
+      alert(`Error al reproducir: ${error}`);
+      setIsPlaying(false);
     }
   };
 
@@ -40,9 +45,15 @@ export const MusicPlayer = () => {
     const handlePause = () => setIsPlaying(false);
     const handleEnded = () => setIsPlaying(false);
 
+    const handleError = () => {
+      console.error("Error cargando el MP3");
+      alert("No se pudo cargar el archivo MP3");
+    };
+
     audio.addEventListener("play", handlePlay);
     audio.addEventListener("pause", handlePause);
     audio.addEventListener("ended", handleEnded);
+    audio.addEventListener("error", handleError);
 
     return () => {
       audio.pause();
@@ -50,6 +61,7 @@ export const MusicPlayer = () => {
       audio.removeEventListener("play", handlePlay);
       audio.removeEventListener("pause", handlePause);
       audio.removeEventListener("ended", handleEnded);
+      audio.removeEventListener("error", handleError);
     };
   }, []);
 
@@ -57,7 +69,7 @@ export const MusicPlayer = () => {
     <>
       <audio
         ref={audioRef}
-        src="./public/music/song.mp3"
+        src="/Music/song.mp3"
         preload="auto"
         playsInline
         loop
@@ -77,12 +89,9 @@ export const MusicPlayer = () => {
           duration: 0.6,
         }}
         className="fixed bottom-6 right-6 z-9999"
-        style={{ pointerEvents: "auto" }}
       >
         <button
           onClick={toggleMusic}
-          onTouchStart={toggleMusic}
-          style={{ pointerEvents: "auto" }}
           className="
             flex
             items-center
@@ -103,8 +112,12 @@ export const MusicPlayer = () => {
           <motion.div
             animate={
               isPlaying
-                ? { rotate: 360 }
-                : { rotate: 0 }
+                ? {
+                    rotate: 360,
+                  }
+                : {
+                    rotate: 0,
+                  }
             }
             transition={{
               duration: 4,
