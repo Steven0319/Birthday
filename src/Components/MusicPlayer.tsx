@@ -133,7 +133,7 @@ export const MusicPlayer = () => {
           <span className="text-sm md:text-base">
             {isPlaying
               ? "Pausar Música"
-              : "Nuestra Canción ❤️"}
+              : "Reproducir Música❤️"}
           </span>
 
           <span className="text-pink-400">
