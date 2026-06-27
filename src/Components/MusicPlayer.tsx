@@ -69,7 +69,7 @@ export const MusicPlayer = () => {
     <>
       <audio
         ref={audioRef}
-        src="/Music/song.mp3"
+        src="public/Music/song.mp3"
         preload="auto"
         playsInline
         loop
