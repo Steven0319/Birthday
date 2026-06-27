@@ -12,6 +12,8 @@ export const MusicPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
 
   const toggleMusic = async () => {
+    alert("Botón detectado");
+
     const audio = audioRef.current;
 
     if (!audio) return;
@@ -74,10 +76,13 @@ export const MusicPlayer = () => {
           delay: 2,
           duration: 0.6,
         }}
-        className="fixed bottom-6 right-6 z-50"
+        className="fixed bottom-6 right-6 z-9999"
+        style={{ pointerEvents: "auto" }}
       >
         <button
           onClick={toggleMusic}
+          onTouchStart={toggleMusic}
+          style={{ pointerEvents: "auto" }}
           className="
             flex
             items-center
